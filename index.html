@@ -1,208 +1,1224 @@
 <!DOCTYPE html>
+
 <html lang="id">
 <head>
-  <meta charset="UTF-8">
-  <title>Simulasi BHD & Zona Heart Rate</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: url("https://raw.githubusercontent.com/ambulan119/heartratezone/refs/heads/main/ambu.jpeg") no-repeat center center fixed;
-      background-size: cover;
-      color: #e0e0e0;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    h1, h2 { color: #64ffda; text-align: center; }
-    .container {
-      width: 90%;
-      max-width: 460px;
-      background: rgba(17,34,64,0.9); 
-      padding: 25px;
-      border-radius: 14px;
-      box-shadow: 0 0 15px rgba(0,0,0,0.6);
-      margin-bottom: 20px;
-    }
-    label {
-      display: block;
-      margin-top: 12px;
-      font-weight: bold;
-      text-align: center;
-    }
-    input {
-      width: 80%;
-      padding: 10px;
-      margin: 8px auto;
-      border: none;
-      border-radius: 6px;
-      text-align: center;
-      display: block;
-    }
-    button {
-      margin-top: 15px;
-      padding: 10px;
-      width: 85%;
-      border: none;
-      border-radius: 8px;
-      background: #64ffda;
-      color: #0a192f;
-      font-size: 16px;
-      font-weight: bold;
-      cursor: pointer;
-      transition: 0.3s;
-      display: block;
-      margin-left: auto;
-      margin-right: auto;
-    }
-    button:hover { background: #38bdf8; color: #fff; }
-    button:disabled { background: #555; cursor: not-allowed; }
-    .result {
-      margin-top: 20px;
-      padding: 15px;
-      background: rgba(35,53,84,0.9);
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    .highlight {
-      padding: 10px; border-radius: 8px; margin-top: 10px;
-      font-weight: bold; text-align: center;
-    }
-    .z1 { background: #16a34a; color: white; }
-    .z2 { background: #0ea5e9; color: white; }
-    .z3 { background: #facc15; color: black; }
-    .z4 { background: #ef4444; color: white; }
-    .z5 { background: #991b1b; color: white; }
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 15px;
-    }
-    th, td {
-      padding: 8px;
-      text-align: center;
-      border: 1px solid #334155;
-    }
-    th { background: #1e293b; }
-    .progress {
-      width: 100%;
-      height: 20px;
-      background: #334155;
-      border-radius: 10px;
-      margin: 15px 0;
-      overflow: hidden;
-    }
-    .progress-bar {
-      height: 100%;
-      width: 0;
-      border-radius: 10px;
-      transition: width 0.5s ease;
-    }
-  </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Simulasi BHD & Materi Pembelajaran</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --cyan:#64ffda;
+  --blue:#38bdf8;
+  --navy:#071426;
+  --panel:rgba(10,25,47,.94);
+  --panel2:rgba(17,34,64,.94);
+  --border:rgba(100,255,218,.18);
+  --text:#e6edf5;
+  --muted:#94a3b8;
+}
+
+body{
+  font-family:Arial,Helvetica,sans-serif;
+  background:
+    linear-gradient(rgba(3,10,20,.76),rgba(3,10,20,.9)),
+    url("https://raw.githubusercontent.com/ambulan119/heartratezone/refs/heads/main/ambu.jpeg")
+    no-repeat center center fixed;
+  background-size:cover;
+  color:var(--text);
+  margin:0;
+  min-height:100vh;
+}
+
+/* ================= HEADER ================= */
+
+.header{
+  position:sticky;
+  top:0;
+  z-index:1000;
+  background:rgba(4,15,30,.94);
+  backdrop-filter:blur(15px);
+  border-bottom:1px solid var(--border);
+  box-shadow:0 8px 30px rgba(0,0,0,.35);
+}
+
+.nav{
+  max-width:1100px;
+  margin:auto;
+  min-height:68px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:15px;
+  padding:10px 20px;
+}
+
+.brand{
+  display:flex;
+  align-items:center;
+  gap:10px;
+  font-weight:800;
+  color:var(--cyan);
+  letter-spacing:.5px;
+}
+
+.brand-icon{
+  width:38px;
+  height:38px;
+  border-radius:10px;
+  display:grid;
+  place-items:center;
+  background:linear-gradient(135deg,#0ea5e9,#14b8a6);
+  color:white;
+  font-size:20px;
+  box-shadow:0 0 20px rgba(56,189,248,.3);
+}
+
+.nav-buttons{
+  display:flex;
+  gap:8px;
+  flex-wrap:wrap;
+  justify-content:flex-end;
+}
+
+.nav-btn{
+  border:1px solid rgba(100,255,218,.15);
+  background:rgba(255,255,255,.04);
+  color:#cbd5e1;
+  padding:9px 14px;
+  border-radius:9px;
+  cursor:pointer;
+  font-weight:700;
+  transition:.25s;
+}
+
+.nav-btn:hover,
+.nav-btn.active{
+  background:var(--cyan);
+  color:#06131f;
+  box-shadow:0 0 18px rgba(100,255,218,.25);
+}
+
+/* ================= MAIN ================= */
+
+main{
+  max-width:1050px;
+  margin:auto;
+  padding:30px 15px 60px;
+}
+
+.page{
+  display:none;
+}
+
+.page.active{
+  display:block;
+}
+
+.hero{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.hero h1{
+  color:var(--cyan);
+  font-size:clamp(25px,5vw,40px);
+  margin:10px 0;
+  text-shadow:0 0 20px rgba(100,255,218,.2);
+}
+
+.hero p{
+  color:var(--muted);
+  margin:0;
+}
+
+/* ================= CARD ================= */
+
+.container{
+  width:100%;
+  max-width:500px;
+  margin:0 auto 20px;
+  background:var(--panel2);
+  padding:25px;
+  border-radius:16px;
+  border:1px solid var(--border);
+  box-shadow:0 15px 45px rgba(0,0,0,.35);
+}
+
+.container h2{
+  color:var(--cyan);
+  text-align:center;
+}
+
+/* ================= FORM ================= */
+
+label{
+  display:block;
+  margin-top:13px;
+  font-weight:bold;
+  text-align:center;
+}
+
+input{
+  width:85%;
+  padding:12px;
+  margin:8px auto;
+  border:1px solid #334155;
+  border-radius:8px;
+  text-align:center;
+  display:block;
+  background:#071426;
+  color:white;
+  outline:none;
+}
+
+input:focus{
+  border-color:var(--cyan);
+  box-shadow:0 0 12px rgba(100,255,218,.15);
+}
+
+button{
+  margin-top:12px;
+  padding:11px;
+  width:85%;
+  border:none;
+  border-radius:9px;
+  background:var(--cyan);
+  color:#0a192f;
+  font-size:15px;
+  font-weight:bold;
+  cursor:pointer;
+  transition:.25s;
+  display:block;
+  margin-left:auto;
+  margin-right:auto;
+}
+
+button:hover{
+  background:var(--blue);
+  color:white;
+  transform:translateY(-1px);
+}
+
+.btn-secondary{
+  background:#334155;
+  color:white;
+}
+
+/* ================= RESULT ================= */
+
+.result{
+  margin-top:20px;
+  padding:15px;
+  background:rgba(35,53,84,.9);
+  border-radius:10px;
+  font-size:14px;
+}
+
+.highlight{
+  padding:10px;
+  border-radius:8px;
+  margin-top:10px;
+  font-weight:bold;
+  text-align:center;
+}
+
+.z1{background:#16a34a;color:white}
+.z2{background:#0ea5e9;color:white}
+.z3{background:#facc15;color:black}
+.z4{background:#ef4444;color:white}
+.z5{background:#991b1b;color:white}
+
+table{
+  width:100%;
+  border-collapse:collapse;
+  margin-top:15px;
+}
+
+th,td{
+  padding:9px;
+  text-align:center;
+  border:1px solid #334155;
+}
+
+th{background:#1e293b}
+
+.progress{
+  width:100%;
+  height:20px;
+  background:#334155;
+  border-radius:10px;
+  margin:15px 0;
+  overflow:hidden;
+}
+
+.progress-bar{
+  height:100%;
+  width:0;
+  border-radius:10px;
+  transition:width .5s ease;
+}
+
+/* ================= MATERIAL ================= */
+
+.material-header{
+  text-align:center;
+  margin-bottom:25px;
+}
+
+.material-header h1{
+  color:var(--cyan);
+  margin-bottom:8px;
+}
+
+.material-header p{
+  color:var(--muted);
+}
+
+.search{
+  max-width:600px;
+  margin:0 auto 25px;
+}
+
+.search input{
+  width:100%;
+  text-align:left;
+  padding:14px 18px;
+}
+
+.material-grid{
+  display:grid;
+  grid-template-columns:repeat(auto-fit,minmax(240px,1fr));
+  gap:18px;
+}
+
+.material-card{
+  background:rgba(10,25,47,.94);
+  border:1px solid var(--border);
+  border-radius:16px;
+  padding:20px;
+  transition:.3s;
+  box-shadow:0 10px 30px rgba(0,0,0,.3);
+}
+
+.material-card:hover{
+  transform:translateY(-4px);
+  border-color:var(--cyan);
+  box-shadow:0 15px 40px rgba(100,255,218,.12);
+}
+
+.material-icon{
+  width:52px;
+  height:52px;
+  border-radius:14px;
+  display:grid;
+  place-items:center;
+  font-size:25px;
+  background:rgba(100,255,218,.1);
+  margin-bottom:15px;
+}
+
+.material-card h3{
+  margin:0 0 8px;
+  color:white;
+}
+
+.material-card p{
+  color:#94a3b8;
+  font-size:14px;
+  min-height:40px;
+}
+
+.tag{
+  display:inline-block;
+  font-size:11px;
+  padding:5px 8px;
+  border-radius:20px;
+  background:#0f3340;
+  color:var(--cyan);
+  margin-bottom:12px;
+}
+
+.material-card button{
+  width:100%;
+  margin-top:15px;
+}
+
+/* ================= VIEWER ================= */
+
+.viewer{
+  display:none;
+  position:fixed;
+  inset:0;
+  z-index:2000;
+  background:rgba(2,7,15,.97);
+  backdrop-filter:blur(10px);
+}
+
+.viewer.active{
+  display:flex;
+  flex-direction:column;
+}
+
+.viewer-bar{
+  min-height:58px;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  padding:8px 14px;
+  background:#071426;
+  border-bottom:1px solid var(--border);
+}
+
+.viewer-title{
+  color:var(--cyan);
+  font-weight:bold;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+
+.viewer-actions{
+  display:flex;
+  gap:7px;
+}
+
+.viewer-actions button{
+  width:auto;
+  margin:0;
+  padding:8px 12px;
+  font-size:13px;
+}
+
+.viewer-frame{
+  flex:1;
+  width:100%;
+  border:0;
+  background:white;
+}
+
+/* ================= FOOTER ================= */
+
+footer{
+  text-align:center;
+  color:#64748b;
+  font-size:12px;
+  padding:20px;
+}
+
+/* ================= MOBILE ================= */
+
+@media(max-width:600px){
+  .nav{
+    flex-direction:column;
+    align-items:stretch;
+  }
+
+  .brand{
+    justify-content:center;
+  }
+
+  .nav-buttons{
+    justify-content:center;
+  }
+
+  .container{
+    padding:18px;
+  }
+
+  table{
+    font-size:12px;
+  }
+}
+</style>
+
 </head>
+
 <body>
-  <h1>Simulasi BHD & Zona Heart Rate</h1>
-  <div class="container">
-    <label for="usia">Usia:</label>
-    <input type="number" id="usia" placeholder="Masukkan usia (tahun)">
-    
-    <label for="hrBefore">HR Sebelum BHD (bpm):</label>
-    <input type="number" id="hrBefore" placeholder="Denyut per menit sebelum BHD">
 
-    <label for="hrAfter">HR Sesudah BHD (bpm):</label>
-    <input type="number" id="hrAfter" placeholder="Denyut per menit setelah BHD">
+<!-- =========================================================
+     HEADER / MENU
+========================================================= -->
 
-    <button onclick="hitungHasil()">Hitung Hasil</button>
-    <button onclick="resetForm()">Reset</button>
+<header class="header">
+  <nav class="nav">
 
-    <div id="hasil" class="result" style="display:none;"></div>
-    <div class="progress"><div id="progressBar" class="progress-bar"></div></div>
+```
+<div class="brand">
+  <div class="brand-icon">🚑</div>
+  <span>AMBULANS 119 • RSSA</span>
+</div>
+
+<div class="nav-buttons">
+  <button class="nav-btn active" onclick="showPage('simulasi',this)">
+    ❤️ Simulasi BHD
+  </button>
+
+  <button class="nav-btn" onclick="showPage('materi',this)">
+    📚 Materi Pembelajaran
+  </button>
+</div>
+```
+
+  </nav>
+</header>
+
+<main>
+
+<!-- =========================================================
+     HALAMAN SIMULASI
+========================================================= -->
+
+<section id="simulasi" class="page active">
+
+  <div class="hero">
+    <h1>Simulasi BHD & Zona Heart Rate</h1>
+    <p>Simulasi perubahan denyut jantung sebelum dan sesudah aktivitas BHD</p>
   </div>
 
   <div class="container">
-    <h2>Zona Heart Rate</h2>
-    <table>
-      <tr><th>Zona</th><th>% HRmax</th><th>Keterangan</th></tr>
-      <tr class="z1"><td>Zona 1</td><td>50–60%</td><td>Pemulihan, sangat ringan</td></tr>
-      <tr class="z2"><td>Zona 2</td><td>60–70%</td><td>Dasar aerobik, ringan</td></tr>
-      <tr class="z3"><td>Zona 3</td><td>70–80%</td><td>Aerobik, sedang</td></tr>
-      <tr class="z4"><td>Zona 4</td><td>80–90%</td><td>Anaerobik, berat</td></tr>
-      <tr class="z5"><td>Zona 5</td><td>90–100%</td><td>Sangat berat / maksimal</td></tr>
-    </table>
-    <p><small>*HRmax = 220 – usia (tahun). Zona dihitung berdasarkan persentase HRmax.</small></p>
+
+```
+<label for="usia">Usia</label>
+<input
+  type="number"
+  id="usia"
+  placeholder="Masukkan usia (tahun)"
+>
+
+<label for="hrBefore">HR Sebelum BHD (bpm)</label>
+<input
+  type="number"
+  id="hrBefore"
+  placeholder="Denyut per menit sebelum BHD"
+>
+
+<label for="hrAfter">HR Sesudah BHD (bpm)</label>
+<input
+  type="number"
+  id="hrAfter"
+  placeholder="Denyut per menit setelah BHD"
+>
+
+<button onclick="hitungHasil()">
+  ⚡ HITUNG HASIL
+</button>
+
+<button
+  class="btn-secondary"
+  onclick="resetForm()">
+  ↻ RESET
+</button>
+
+<div
+  id="hasil"
+  class="result"
+  style="display:none">
+</div>
+
+<div class="progress">
+  <div
+    id="progressBar"
+    class="progress-bar">
+  </div>
+</div>
+```
+
   </div>
 
-  <script>
-    function hitungHasil() {
-      const usia = parseInt(document.getElementById("usia").value);
-      const hrBefore = parseInt(document.getElementById("hrBefore").value);
-      const hrAfter = parseInt(document.getElementById("hrAfter").value);
-      if (!usia || !hrBefore || !hrAfter) {
-        alert("Harap isi semua data!");
-        return;
-      }
+  <div class="container">
 
-      const hrMax = 220 - usia;
-      const persen = (hrAfter / hrMax) * 100;
-      let zona = "", ket = "", cssClass = "", warna = "";
+```
+<h2>Zona Heart Rate</h2>
 
-      if (persen < 60) { zona = "Zona 1 (Recovery)"; ket = "Pemulihan, sangat ringan"; cssClass = "z1"; warna = "#16a34a"; }
-      else if (persen < 70) { zona = "Zona 2 (Endurance)"; ket = "Dasar aerobik, ringan"; cssClass = "z2"; warna = "#0ea5e9"; }
-      else if (persen < 80) { zona = "Zona 3 (Tempo)"; ket = "Aerobik, sedang"; cssClass = "z3"; warna = "#facc15"; }
-      else if (persen < 90) { zona = "Zona 4 (Threshold)"; ket = "Anaerobik, berat"; cssClass = "z4"; warna = "#ef4444"; }
-      else { zona = "Zona 5 (VO₂max)"; ket = "Sangat berat / maksimal"; cssClass = "z5"; warna = "#991b1b"; }
+<table>
 
-      const hasil = `
-        <h3>Hasil Pengukuran</h3>
-        <p><b>Usia:</b> ${usia} tahun</p>
-        <p><b>HR Sebelum BHD:</b> ${hrBefore} bpm</p>
-        <p><b>HR Sesudah BHD:</b> ${hrAfter} bpm</p>
-        <p><b>Selisih:</b> ${hrAfter - hrBefore} bpm</p>
-        <div class="highlight ${cssClass}">
-          Anda usia ${usia} tahun, setelah beraktivitas BHD dalam 2 menit secara benar, masuk dalam ${zona}.
-          <br><small>${ket}</small>
-        </div>
-        <p><i>Saran:</i> ${
-          persen < 60 ? "Tingkatkan intensitas agar mendapat manfaat latihan." :
-          persen < 70 ? "Bagus! Pertahankan untuk meningkatkan kebugaran dasar." :
-          persen < 80 ? "Sempurna untuk melatih daya tahan aerobik." :
-          persen < 90 ? "Latihan berat, lakukan dengan pengawasan dan cukup istirahat." :
-          "Ini sangat berat! Sebaiknya tidak terlalu sering dilakukan, jaga keselamatan."
-        }</p>
-      `;
-      document.getElementById("hasil").innerHTML = hasil;
-      document.getElementById("hasil").style.display = "block";
+  <tr>
+    <th>Zona</th>
+    <th>% HRmax</th>
+    <th>Keterangan</th>
+  </tr>
 
-      const bar = document.getElementById("progressBar");
-      bar.style.width = persen + "%";
-      bar.style.background = warna;
-    }
+  <tr class="z1">
+    <td>Zona 1</td>
+    <td>50–60%</td>
+    <td>Pemulihan, sangat ringan</td>
+  </tr>
 
-    function resetForm() {
-      document.getElementById("usia").value = "";
-      document.getElementById("hrBefore").value = "";
-      document.getElementById("hrAfter").value = "";
-      document.getElementById("hasil").style.display = "none";
-      document.getElementById("progressBar").style.width = "0";
-      document.getElementById("usia").focus();
-    }
+  <tr class="z2">
+    <td>Zona 2</td>
+    <td>60–70%</td>
+    <td>Dasar aerobik, ringan</td>
+  </tr>
 
-    document.addEventListener("keydown", function(e) {
-      if (e.key === "Enter") {
-        e.preventDefault();
-        hitungHasil();
-      } else if (e.key === "Escape") {
-        resetForm();
-      }
+  <tr class="z3">
+    <td>Zona 3</td>
+    <td>70–80%</td>
+    <td>Aerobik, sedang</td>
+  </tr>
+
+  <tr class="z4">
+    <td>Zona 4</td>
+    <td>80–90%</td>
+    <td>Anaerobik, berat</td>
+  </tr>
+
+  <tr class="z5">
+    <td>Zona 5</td>
+    <td>90–100%</td>
+    <td>Sangat berat / maksimal</td>
+  </tr>
+
+</table>
+
+<p>
+  <small>
+    *HRmax = 220 – usia (tahun).
+    Zona dihitung berdasarkan persentase HRmax.
+  </small>
+</p>
+```
+
+  </div>
+
+</section>
+
+<!-- =========================================================
+     HALAMAN MATERI
+========================================================= -->
+
+<section id="materi" class="page">
+
+  <div class="material-header">
+
+```
+<h1>📚 Materi Pembelajaran</h1>
+
+<p>
+  Kumpulan materi edukasi dan pembelajaran
+  Ambulans 119 • IGD RSSA
+</p>
+```
+
+  </div>
+
+  <div class="search">
+
+```
+<input
+  type="search"
+  id="searchMaterial"
+  placeholder="🔎 Cari materi..."
+  oninput="filterMaterial()">
+```
+
+  </div>
+
+  <div class="material-grid" id="materialGrid">
+
+```
+<!-- ================= MATERI 1 ================= -->
+
+<article
+  class="material-card"
+  data-search="gigi tht mata triage">
+
+  <div class="material-icon">
+    🦷
+  </div>
+
+  <span class="tag">
+    TRIAGE
+  </span>
+
+  <h3>
+    Triage Gigi • THT • Mata
+  </h3>
+
+  <p>
+    Materi pembelajaran mengenai
+    prioritas pemeriksaan dan pertolongan
+    pada kasus gigi, THT, dan mata.
+  </p>
+
+  <button onclick="openViewer(
+    'Triage Gigi • THT • Mata',
+    'https://ambulan119.github.io/hrzone/gigi%20tht%20mata.html'
+  )">
+    ▶ BUKA MATERI
+  </button>
+
+</article>
+
+
+<!-- ================= MATERI 2 ================= -->
+
+<article
+  class="material-card"
+  data-search="bhd bantuan hidup dasar cardiac arrest">
+
+  <div class="material-icon">
+    ❤️
+  </div>
+
+  <span class="tag">
+    BHD
+  </span>
+
+  <h3>
+    Bantuan Hidup Dasar
+  </h3>
+
+  <p>
+    Materi pembelajaran BHD untuk
+    pengenalan algoritma pertolongan
+    henti jantung.
+  </p>
+
+  <button onclick="openViewer(
+    'Bantuan Hidup Dasar',
+    'https://drive.google.com/file/d/ID_FILE_BHD/view'
+  )">
+    ▶ BUKA MATERI
+  </button>
+
+</article>
+
+
+<!-- ================= MATERI 3 ================= -->
+
+<article
+  class="material-card"
+  data-search="triage abdomen abdominal pain">
+
+  <div class="material-icon">
+    🩺
+  </div>
+
+  <span class="tag">
+    TRIAGE
+  </span>
+
+  <h3>
+    Triage Abdominal Pain
+  </h3>
+
+  <p>
+    Materi pengkajian nyeri abdomen,
+    red flags, regio abdomen, dan
+    pendekatan triage.
+  </p>
+
+  <button onclick="openViewer(
+    'Triage Abdominal Pain',
+    'https://drive.google.com/file/d/ID_FILE_ABDOMEN/view'
+  )">
+    ▶ BUKA MATERI
+  </button>
+
+</article>
+
+
+<!-- ================= MATERI 4 ================= -->
+
+<article
+  class="material-card"
+  data-search="keracunan poisoning triage">
+
+  <div class="material-icon">
+    ☠️
+  </div>
+
+  <span class="tag">
+    EMERGENCY
+  </span>
+
+  <h3>
+    Triage Keracunan
+  </h3>
+
+  <p>
+    Materi pengenalan red flags,
+    prioritas triage, dan pendekatan
+    pasien keracunan.
+  </p>
+
+  <button onclick="openViewer(
+    'Triage Keracunan',
+    'https://drive.google.com/file/d/ID_FILE_KERACUNAN/view'
+  )">
+    ▶ BUKA MATERI
+  </button>
+
+</article>
+
+
+<!-- ================= MATERI 5 ================= -->
+
+<article
+  class="material-card"
+  data-search="materi emergency kegawatdaruratan">
+
+  <div class="material-icon">
+    🚨
+  </div>
+
+  <span class="tag">
+    EMERGENCY
+  </span>
+
+  <h3>
+    Materi Kegawatdaruratan
+  </h3>
+
+  <p>
+    Tambahkan materi HTML atau PDF
+    lainnya pada bagian ini.
+  </p>
+
+  <button onclick="openViewer(
+    'Materi Kegawatdaruratan',
+    'https://drive.google.com/file/d/ID_FILE/view'
+  )">
+    ▶ BUKA MATERI
+  </button>
+
+</article>
+```
+
+  </div>
+
+</section>
+
+</main>
+
+<!-- =========================================================
+     VIEWER
+========================================================= -->
+
+<div
+  id="viewer"
+  class="viewer">
+
+  <div class="viewer-bar">
+
+```
+<div
+  id="viewerTitle"
+  class="viewer-title">
+  Materi
+</div>
+
+<div class="viewer-actions">
+
+  <button onclick="openExternal()">
+    ↗ Buka
+  </button>
+
+  <button onclick="toggleFullscreen()">
+    ⛶ Fullscreen
+  </button>
+
+  <button onclick="closeViewer()">
+    ✕ Tutup
+  </button>
+
+</div>
+```
+
+  </div>
+
+  <iframe
+    id="viewerFrame"
+    class="viewer-frame"
+    allowfullscreen>
+  </iframe>
+
+</div>
+
+<footer>
+  Ambulans 119 • IGD RSUD Dr. Saiful Anwar • Materi Pembelajaran
+</footer>
+
+<script>
+
+/* =========================================================
+   NAVIGATION
+========================================================= */
+
+function showPage(pageId, button){
+
+  document
+    .querySelectorAll(".page")
+    .forEach(page => {
+      page.classList.remove("active");
     });
 
-    // ✅ Auto fokus ke input usia saat halaman dibuka
-    window.onload = () => {
-      document.getElementById("usia").focus();
-    };
-  </script>
+  document
+    .getElementById(pageId)
+    .classList.add("active");
+
+  document
+    .querySelectorAll(".nav-btn")
+    .forEach(btn => {
+      btn.classList.remove("active");
+    });
+
+  button.classList.add("active");
+
+  window.scrollTo({
+    top:0,
+    behavior:"smooth"
+  });
+}
+
+
+/* =========================================================
+   VIEWER
+========================================================= */
+
+let currentURL = "";
+
+function openViewer(title,url){
+
+  currentURL = url;
+
+  document.getElementById("viewerTitle").textContent = title;
+
+  document.getElementById("viewerFrame").src = url;
+
+  document.getElementById("viewer").classList.add("active");
+
+  document.body.style.overflow = "hidden";
+}
+
+
+function closeViewer(){
+
+  document.getElementById("viewer").classList.remove("active");
+
+  document.getElementById("viewerFrame").src = "";
+
+  document.body.style.overflow = "";
+
+}
+
+
+function openExternal(){
+
+  if(currentURL){
+
+    window.open(
+      currentURL,
+      "_blank",
+      "noopener,noreferrer"
+    );
+
+  }
+
+}
+
+
+function toggleFullscreen(){
+
+  const viewer = document.getElementById("viewer");
+
+  if(!document.fullscreenElement){
+
+    viewer.requestFullscreen?.();
+
+  }else{
+
+    document.exitFullscreen?.();
+
+  }
+
+}
+
+
+/* ESC = CLOSE VIEWER */
+
+document.addEventListener("keydown",function(e){
+
+  if(e.key === "Escape"){
+
+    const viewer =
+      document.getElementById("viewer");
+
+    if(viewer.classList.contains("active")){
+
+      closeViewer();
+
+    }
+
+  }
+
+});
+
+
+/* =========================================================
+   SEARCH MATERIAL
+========================================================= */
+
+function filterMaterial(){
+
+  const keyword =
+    document
+      .getElementById("searchMaterial")
+      .value
+      .toLowerCase()
+      .trim();
+
+  document
+    .querySelectorAll(".material-card")
+    .forEach(card => {
+
+      const text =
+        card
+          .innerText
+          .toLowerCase();
+
+      card.style.display =
+        text.includes(keyword)
+          ? ""
+          : "none";
+
+    });
+
+}
+
+
+/* =========================================================
+   KALKULATOR HEART RATE
+========================================================= */
+
+function hitungHasil(){
+
+  const usia =
+    parseInt(
+      document.getElementById("usia").value
+    );
+
+  const hrBefore =
+    parseInt(
+      document.getElementById("hrBefore").value
+    );
+
+  const hrAfter =
+    parseInt(
+      document.getElementById("hrAfter").value
+    );
+
+
+  if(
+    !usia ||
+    !hrBefore ||
+    !hrAfter
+  ){
+
+    alert("Harap isi semua data!");
+
+    return;
+
+  }
+
+
+  const hrMax =
+    220 - usia;
+
+  const persen =
+    (hrAfter / hrMax) * 100;
+
+
+  let zona = "";
+  let ket = "";
+  let cssClass = "";
+  let warna = "";
+
+
+  if(persen < 60){
+
+    zona = "Zona 1 (Recovery)";
+    ket = "Pemulihan, sangat ringan";
+    cssClass = "z1";
+    warna = "#16a34a";
+
+  }
+
+  else if(persen < 70){
+
+    zona = "Zona 2 (Endurance)";
+    ket = "Dasar aerobik, ringan";
+    cssClass = "z2";
+    warna = "#0ea5e9";
+
+  }
+
+  else if(persen < 80){
+
+    zona = "Zona 3 (Tempo)";
+    ket = "Aerobik, sedang";
+    cssClass = "z3";
+    warna = "#facc15";
+
+  }
+
+  else if(persen < 90){
+
+    zona = "Zona 4 (Threshold)";
+    ket = "Anaerobik, berat";
+    cssClass = "z4";
+    warna = "#ef4444";
+
+  }
+
+  else{
+
+    zona = "Zona 5 (VO₂max)";
+    ket = "Sangat berat / maksimal";
+    cssClass = "z5";
+    warna = "#991b1b";
+
+  }
+
+
+  const hasil = `
+
+    <h3>Hasil Pengukuran</h3>
+
+    <p>
+      <b>Usia:</b>
+      ${usia} tahun
+    </p>
+
+    <p>
+      <b>HR Sebelum BHD:</b>
+      ${hrBefore} bpm
+    </p>
+
+    <p>
+      <b>HR Sesudah BHD:</b>
+      ${hrAfter} bpm
+    </p>
+
+    <p>
+      <b>Selisih:</b>
+      ${hrAfter - hrBefore} bpm
+    </p>
+
+    <div class="highlight ${cssClass}">
+
+      Anda usia ${usia} tahun,
+      setelah beraktivitas BHD dalam 2 menit
+      secara benar, masuk dalam ${zona}.
+
+      <br>
+
+      <small>
+        ${ket}
+      </small>
+
+    </div>
+
+    <p>
+      <i>Saran:</i>
+
+      ${
+        persen < 60
+        ? "Tingkatkan intensitas agar mendapat manfaat latihan."
+
+        : persen < 70
+        ? "Bagus! Pertahankan untuk meningkatkan kebugaran dasar."
+
+        : persen < 80
+        ? "Sempurna untuk melatih daya tahan aerobik."
+
+        : persen < 90
+        ? "Latihan berat, lakukan dengan pengawasan dan cukup istirahat."
+
+        : "Ini sangat berat! Sebaiknya tidak terlalu sering dilakukan, jaga keselamatan."
+      }
+
+    </p>
+
+  `;
+
+
+  document.getElementById("hasil").innerHTML = hasil;
+
+  document.getElementById("hasil").style.display = "block";
+
+
+  const bar =
+    document.getElementById("progressBar");
+
+  bar.style.width =
+    Math.min(persen,100) + "%";
+
+  bar.style.background =
+    warna;
+
+}
+
+
+/* =========================================================
+   RESET
+========================================================= */
+
+function resetForm(){
+
+  document.getElementById("usia").value = "";
+
+  document.getElementById("hrBefore").value = "";
+
+  document.getElementById("hrAfter").value = "";
+
+  document.getElementById("hasil").style.display = "none";
+
+  document.getElementById("progressBar").style.width = "0";
+
+  document.getElementById("usia").focus();
+
+}
+
+
+/* =========================================================
+   KEYBOARD
+========================================================= */
+
+document.addEventListener("keydown",function(e){
+
+  if(
+    e.key === "Enter" &&
+    document
+      .getElementById("simulasi")
+      .classList
+      .contains("active")
+  ){
+
+    e.preventDefault();
+
+    hitungHasil();
+
+  }
+
+});
+
+
+/* AUTO FOCUS */
+
+window.onload = () => {
+
+  document
+    .getElementById("usia")
+    .focus();
+
+};
+
+</script>
+
 </body>
 </html>
-
-
