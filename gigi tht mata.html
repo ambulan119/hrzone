@@ -1,0 +1,2170 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Triage Gigi • THT • Mata | SOAP</title>
+
+<style>
+*{box-sizing:border-box}
+
+:root{
+  --bg:#060a10;
+  --panel:rgba(17,27,41,.88);
+  --panel2:rgba(25,38,56,.82);
+  --line:rgba(255,255,255,.11);
+  --text:#f3f8fc;
+  --muted:#a9bacb;
+  --cyan:#58e6ff;
+  --green:#55e6a5;
+  --yellow:#ffd166;
+  --orange:#ff9f43;
+  --red:#ff6378;
+}
+
+html,body{
+  width:100%;
+  height:100%;
+  margin:0;
+  overflow:hidden;
+}
+
+body{
+  font-family:Inter,"Segoe UI",Arial,sans-serif;
+  color:var(--text);
+  background:
+    radial-gradient(circle at 10% 10%,rgba(88,230,255,.11),transparent 30%),
+    radial-gradient(circle at 90% 90%,rgba(116,82,255,.10),transparent 32%),
+    var(--bg);
+}
+
+.deck{
+  position:relative;
+  width:100vw;
+  height:100vh;
+  overflow:hidden;
+}
+
+.slide{
+  position:absolute;
+  inset:0;
+  padding:6.5vh 7vw 8vh;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  opacity:0;
+  transform:translateX(35px);
+  pointer-events:none;
+  transition:.42s ease;
+}
+
+.slide.active{
+  opacity:1;
+  transform:none;
+  pointer-events:auto;
+}
+
+.topbar{
+  position:absolute;
+  top:2.7vh;
+  left:7vw;
+  right:7vw;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  font-size:14px;
+  font-weight:700;
+  letter-spacing:1.8px;
+  color:var(--muted);
+  text-transform:uppercase;
+}
+
+.brand{
+  color:var(--cyan);
+}
+
+h1{
+  margin:0 0 24px;
+  font-size:clamp(54px,7vw,100px);
+  line-height:.95;
+  letter-spacing:-4px;
+}
+
+h2{
+  margin:0 0 30px;
+  font-size:clamp(38px,4.4vw,64px);
+  line-height:1.04;
+  letter-spacing:-2px;
+}
+
+h3{
+  margin:0 0 14px;
+  font-size:clamp(23px,2vw,31px);
+}
+
+p{
+  margin:0;
+}
+
+.cyan{color:var(--cyan)}
+.green{color:var(--green)}
+.yellow{color:var(--yellow)}
+.orange{color:var(--orange)}
+.red{color:var(--red)}
+
+.subtitle{
+  max-width:1050px;
+  color:var(--muted);
+  font-size:clamp(20px,1.8vw,27px);
+  line-height:1.55;
+}
+
+.label{
+  display:inline-block;
+  margin-bottom:16px;
+  padding:8px 13px;
+  border-radius:999px;
+  color:var(--cyan);
+  background:rgba(88,230,255,.09);
+  border:1px solid rgba(88,230,255,.23);
+  font-size:14px;
+  font-weight:900;
+  letter-spacing:1.5px;
+}
+
+.grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:22px;
+}
+
+.grid3{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.card{
+  background:var(--panel);
+  border:1px solid var(--line);
+  border-radius:24px;
+  padding:25px 27px;
+  box-shadow:0 18px 55px rgba(0,0,0,.22);
+}
+
+.card p,
+.card li{
+  font-size:clamp(18px,1.45vw,24px);
+  line-height:1.5;
+}
+
+ul{
+  margin:0;
+  padding-left:25px;
+}
+
+li{
+  margin:7px 0;
+}
+
+li::marker{
+  color:var(--cyan);
+}
+
+.soap{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:18px;
+}
+
+.soap .card{
+  min-height:240px;
+}
+
+.soap-letter{
+  display:block;
+  font-size:58px;
+  line-height:1;
+  font-weight:1000;
+  color:var(--cyan);
+  margin-bottom:14px;
+}
+
+.priority{
+  display:grid;
+  grid-template-columns:repeat(3,1fr);
+  gap:20px;
+}
+
+.priority .card{
+  min-height:250px;
+}
+
+.priority-number{
+  font-size:64px;
+  line-height:1;
+  font-weight:1000;
+  margin-bottom:12px;
+}
+
+.p1{border-color:rgba(255,99,120,.48)}
+.p2{border-color:rgba(255,159,67,.48)}
+.p3{border-color:rgba(85,230,165,.4)}
+
+.flow{
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  gap:12px;
+  flex-wrap:wrap;
+  margin-top:25px;
+}
+
+.step{
+  padding:15px 21px;
+  border-radius:15px;
+  background:rgba(88,230,255,.08);
+  border:1px solid rgba(88,230,255,.22);
+  font-size:clamp(17px,1.45vw,23px);
+  font-weight:900;
+}
+
+.arrow{
+  color:var(--cyan);
+  font-size:28px;
+}
+
+.redflag{
+  margin-top:20px;
+  padding:18px 22px;
+  border-left:5px solid var(--red);
+  border-radius:15px;
+  background:rgba(255,99,120,.08);
+  font-size:clamp(18px,1.5vw,24px);
+  line-height:1.5;
+}
+
+.toolrow{
+  display:flex;
+  flex-wrap:wrap;
+  gap:12px;
+  margin-top:22px;
+}
+
+.tool{
+  padding:11px 16px;
+  border-radius:13px;
+  border:1px solid var(--line);
+  background:rgba(255,255,255,.04);
+  color:#dce8f2;
+  font-size:18px;
+}
+
+.bigquote{
+  font-size:clamp(27px,3vw,44px);
+  line-height:1.35;
+  font-weight:800;
+}
+
+.case{
+  padding:30px;
+  border-radius:28px;
+  background:
+    linear-gradient(135deg,rgba(88,230,255,.07),rgba(120,80,255,.06)),
+    var(--panel);
+  border:1px solid rgba(88,230,255,.22);
+}
+
+.question{
+  font-size:clamp(24px,2.25vw,34px);
+  line-height:1.4;
+  margin-bottom:25px;
+}
+
+.options{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+.option{
+  padding:18px 20px;
+  border:1px solid var(--line);
+  border-radius:16px;
+  background:rgba(255,255,255,.035);
+  font-size:clamp(17px,1.45vw,22px);
+  line-height:1.4;
+  cursor:pointer;
+  transition:.2s;
+}
+
+.option:hover{
+  border-color:var(--cyan);
+  transform:translateY(-2px);
+}
+
+.option.correct{
+  border-color:var(--green);
+  background:rgba(85,230,165,.12);
+}
+
+.option.wrong{
+  border-color:var(--red);
+  background:rgba(255,99,120,.10);
+}
+
+.answer{
+  display:none;
+  margin-top:18px;
+  padding:17px 20px;
+  border-radius:15px;
+  border:1px solid rgba(85,230,165,.3);
+  background:rgba(85,230,165,.08);
+  font-size:20px;
+  line-height:1.5;
+}
+
+.pupil-grid{
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:17px;
+}
+
+.pupil{
+  text-align:center;
+  padding:20px 12px;
+  border-radius:20px;
+  background:var(--panel);
+  border:1px solid var(--line);
+  cursor:pointer;
+}
+
+.pupil:hover{
+  border-color:var(--cyan);
+}
+
+.pupil b{
+  font-size:22px;
+}
+
+.pupil-dot{
+  width:48px;
+  height:48px;
+  border-radius:50%;
+  background:#010305;
+  border:3px solid #64778a;
+  margin:18px auto 13px;
+}
+
+.pupil.miosis .pupil-dot{
+  width:22px;
+  height:22px;
+  margin:31px auto 26px;
+}
+
+.pupil.pinpoint .pupil-dot{
+  width:9px;
+  height:9px;
+  margin:37px auto 32px;
+}
+
+.pupil.midriasis .pupil-dot{
+  width:70px;
+  height:70px;
+  margin:4px auto 8px;
+}
+
+.pupil.aniso .pupil-dot{
+  width:48px;
+  height:48px;
+  box-shadow:42px 0 0 -15px #010305;
+}
+
+.pupil small{
+  color:var(--muted);
+  font-size:15px;
+}
+
+.pupil-result{
+  margin-top:18px;
+  min-height:90px;
+}
+
+.mini{
+  color:var(--muted);
+  font-size:17px;
+  line-height:1.55;
+}
+
+.center{
+  text-align:center;
+}
+
+.big-number{
+  font-size:clamp(60px,8vw,110px);
+  font-weight:1000;
+  line-height:.9;
+}
+
+.footer{
+  position:absolute;
+  left:7vw;
+  right:7vw;
+  bottom:2.3vh;
+  display:flex;
+  justify-content:space-between;
+  color:#65778a;
+  font-size:12px;
+  letter-spacing:1.1px;
+}
+
+.counter{
+  position:absolute;
+  right:7vw;
+  bottom:5.1vh;
+  color:var(--muted);
+  font-size:13px;
+}
+
+.progress{
+  position:absolute;
+  left:0;
+  bottom:0;
+  height:4px;
+  width:0;
+  background:var(--cyan);
+  transition:.3s;
+}
+
+/* TABLET / SMALL SCREEN */
+@media(max-width:1000px){
+  body{overflow:auto}
+  .deck{height:auto;min-height:100vh}
+  .slide{
+    position:relative;
+    min-height:100vh;
+    overflow:auto;
+    padding:75px 6vw 90px;
+  }
+  .soap,
+  .grid3,
+  .priority,
+  .pupil-grid{
+    grid-template-columns:1fr 1fr;
+  }
+}
+
+/* PHONE */
+@media(max-width:650px){
+  .slide{
+    padding:70px 5vw 70px;
+  }
+
+  .grid,
+  .grid3,
+  .soap,
+  .priority,
+  .options,
+  .pupil-grid{
+    grid-template-columns:1fr;
+  }
+
+  h1{font-size:48px}
+  h2{font-size:34px}
+  .card{padding:21px}
+  .footer{display:none}
+}
+/* =========================================================
+   A4 LANDSCAPE — PRINT / SAVE AS PDF
+   297 × 210 mm — 20 SLIDE = 20 HALAMAN
+   ========================================================= */
+
+@page{
+    size:A4 landscape;
+    margin:0;
+}
+
+@media print{
+
+    html,
+    body{
+        width:297mm !important;
+        height:auto !important;
+        margin:0 !important;
+        padding:0 !important;
+        overflow:visible !important;
+        background:#060a10 !important;
+    }
+
+    body{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+
+    .deck{
+        position:relative !important;
+        width:297mm !important;
+        height:auto !important;
+        min-height:0 !important;
+        margin:0 !important;
+        padding:0 !important;
+        overflow:visible !important;
+    }
+
+    /* =========================
+       SETIAP SLIDE = 1 HALAMAN A4
+       ========================= */
+
+    .slide{
+        position:relative !important;
+
+        width:297mm !important;
+        height:210mm !important;
+
+        min-width:297mm !important;
+        min-height:210mm !important;
+
+        max-width:297mm !important;
+        max-height:210mm !important;
+
+        box-sizing:border-box !important;
+
+        margin:0 !important;
+
+        padding:
+            13.5mm
+            18mm
+            17mm
+            18mm !important;
+
+        display:flex !important;
+
+        opacity:1 !important;
+        transform:none !important;
+
+        visibility:visible !important;
+        pointer-events:auto !important;
+
+        overflow:hidden !important;
+
+        page-break-before:always !important;
+        page-break-after:always !important;
+
+        break-before:page !important;
+        break-after:page !important;
+
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+
+    .slide:first-child{
+        page-break-before:auto !important;
+        break-before:auto !important;
+    }
+
+    .slide:last-child{
+        page-break-after:auto !important;
+        break-after:auto !important;
+    }
+
+    /* =========================
+       HILANGKAN KONTROL PRESENTASI
+       ========================= */
+
+    .nav,
+    .controls,
+    .navigation,
+    button,
+    .progress,
+    .counter{
+        display:none !important;
+    }
+
+    /* =========================
+       TOPBAR
+       ========================= */
+
+    .topbar{
+        position:absolute !important;
+
+        top:8mm !important;
+        left:18mm !important;
+        right:18mm !important;
+
+        font-size:10pt !important;
+
+        z-index:20 !important;
+    }
+
+    /* =========================
+       TYPOGRAPHY A4
+       ========================= */
+
+    h1{
+        font-size:30pt !important;
+        line-height:1.05 !important;
+        margin:0 0 5mm !important;
+    }
+
+    h2{
+        font-size:24pt !important;
+        line-height:1.08 !important;
+        margin:0 0 5mm !important;
+    }
+
+    h3{
+        font-size:15pt !important;
+        line-height:1.15 !important;
+    }
+
+    p,
+    li{
+        font-size:10.5pt !important;
+        line-height:1.38 !important;
+    }
+
+    .bigquote{
+        font-size:17pt !important;
+        line-height:1.25 !important;
+    }
+
+    .mini{
+        font-size:9pt !important;
+    }
+
+    .label{
+        font-size:8.5pt !important;
+        letter-spacing:.08em !important;
+    }
+
+    /* =========================
+       GRID
+       ========================= */
+
+    .grid{
+        gap:5mm !important;
+    }
+
+    .card,
+    .case,
+    .redflag,
+    .priority,
+    .soap,
+    .toolrow,
+    .pupil-grid{
+        break-inside:avoid !important;
+        page-break-inside:avoid !important;
+    }
+
+    .card{
+        padding:5mm !important;
+        border-radius:4mm !important;
+    }
+
+    .case{
+        padding:6mm !important;
+        border-radius:5mm !important;
+    }
+
+    .redflag{
+        padding:4mm 5mm !important;
+        border-radius:4mm !important;
+    }
+
+    /* =========================
+       FOOTER
+       ========================= */
+
+    .footer{
+        position:absolute !important;
+
+        left:18mm !important;
+        right:18mm !important;
+        bottom:7mm !important;
+
+        display:flex !important;
+        justify-content:space-between !important;
+        align-items:center !important;
+
+        font-size:7.5pt !important;
+
+        color:#65778a !important;
+
+        z-index:50 !important;
+    }
+
+    /* =========================
+       BACKGROUND IMAGE
+       ========================= */
+
+    .tmj-bg-image,
+    .epistaxis-bg-image,
+    .pupil-bg-image{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+
+    /* =========================
+       TMJ
+       ========================= */
+
+    .tmj-bg-image{
+        right:5mm !important;
+        top:30mm !important;
+
+        width:135mm !important;
+        height:145mm !important;
+
+        opacity:.15 !important;
+    }
+
+    /* =========================
+       EPISTAXIS
+       ========================= */
+
+    .epistaxis-bg-image{
+        right:3mm !important;
+        top:32mm !important;
+
+        width:135mm !important;
+        height:140mm !important;
+
+        opacity:.14 !important;
+    }
+
+    /* =========================
+       PUPIL
+       ========================= */
+
+    .pupil-bg-image{
+        right:-2mm !important;
+        top:28mm !important;
+
+        width:140mm !important;
+        height:145mm !important;
+
+        opacity:.14 !important;
+    }
+
+    /* =========================
+       PUPIL CARDS
+       ========================= */
+
+    .pupil-grid{
+        gap:4mm !important;
+    }
+
+    .pupil{
+        padding:5mm !important;
+    }
+
+    .pupil-result{
+        padding:5mm !important;
+    }
+
+    /* =========================
+       CASE ANSWER
+       ========================= */
+
+    .answer{
+        display:block !important;
+    }
+
+    /* =========================
+       FORCE BACKGROUND
+       ========================= */
+
+    *,
+    *::before,
+    *::after{
+        -webkit-print-color-adjust:exact !important;
+        print-color-adjust:exact !important;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="deck">
+
+<!-- ========================================================= -->
+<!-- 01 -->
+<!-- ========================================================= -->
+
+<section class="slide active">
+
+<div class="topbar">
+<div class="topbar">
+    <span class="brand">TRIAGE OFFICER COURSE</span>
+    <span>RS Dr. Radjiman Wediodiningrat</span>
+</div>
+<span>01 / 20</span>
+</div>
+
+<div>
+    <div class="label" id="tanggalBerjalan"></div>
+</div>
+
+<h1>
+TRIAGE<br>
+<span class="cyan">GIGI • THT • MATA</span>
+</h1>
+
+<p class="subtitle">
+Pendekatan cepat untuk mengumpulkan informasi,
+menilai kondisi, mengenali red flags, dan menentukan prioritas.
+</p>
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 02 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">SOAP</span>
+<span>02 / 20</span>
+</div>
+
+<h2>
+SOAP sebagai <span class="cyan">kerangka triage</span>
+</h2>
+
+<div class="soap">
+
+<div class="card">
+<span class="soap-letter">S</span>
+<h3>SUBJECTIVE</h3>
+<ul>
+<li>Keluhan utama</li>
+<li>Onset & durasi</li>
+<li>Mekanisme kejadian</li>
+<li>Gejala penyerta</li>
+</ul>
+</div>
+
+<div class="card">
+<span class="soap-letter">O</span>
+<h3>OBJECTIVE</h3>
+<ul>
+<li>Kondisi umum</li>
+<li>ABC</li>
+<li>Tanda vital</li>
+<li>Pemeriksaan terarah</li>
+</ul>
+</div>
+
+<div class="card">
+<span class="soap-letter">A</span>
+<h3>ASSESSMENT</h3>
+<ul>
+<li>Stabil / tidak stabil</li>
+<li>Red flags</li>
+<li>Ancaman airway</li>
+<li>Gangguan fungsi</li>
+</ul>
+</div>
+
+<div class="card">
+<span class="soap-letter">P</span>
+<h3>PLAN / PRIORITY</h3>
+<ul>
+<li>P1 / P2 / P3</li>
+<li>Immediate safety</li>
+<li>Monitoring</li>
+<li>Disposition</li>
+</ul>
+</div>
+
+</div>
+
+<div class="flow">
+<div class="step">ASK</div>
+<div class="arrow">→</div>
+<div class="step">LOOK</div>
+<div class="arrow">→</div>
+<div class="step">MEASURE</div>
+<div class="arrow">→</div>
+<div class="step" style="color:#ff6378;font-weight:800;text-shadow:0 0 12px rgba(255,99,120,.35);">
+    RED FLAGS
+</div>
+<div class="arrow">→</div>
+<div class="step">PRIORITIZE</div>
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 03 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">PRIORITY</span>
+<span>03 / 20</span>
+</div>
+
+<h2>
+P1 • P2 • P3
+</h2>
+
+<div class="priority">
+
+<div class="card p1">
+<div class="priority-number red">P1</div>
+<h3>IMMEDIATE</h3>
+<p>
+Ancaman nyawa atau kondisi tidak stabil.
+</p>
+<ul>
+<li>Airway compromise</li>
+<li>Distress napas berat</li>
+<li>Syok / instabilitas</li>
+<li>Penurunan kesadaran signifikan</li>
+</ul>
+</div>
+
+<div class="card p2">
+<div class="priority-number orange">P2</div>
+<h3>EMERGENCY</h3>
+<p>
+Kondisi serius yang membutuhkan evaluasi cepat tetapi relatif stabil.
+</p>
+<ul>
+<li>Red flag akut</li>
+<li>Nyeri berat</li>
+<li>Perdarahan signifikan</li>
+<li>Gangguan fungsi akut</li>
+</ul>
+</div>
+
+<div class="card p3">
+<div class="priority-number green">P3</div>
+<h3>LESS URGENT</h3>
+<p>
+Kondisi stabil tanpa red flag utama.
+</p>
+<ul>
+<li>Keluhan ringan</li>
+<li>Fungsi relatif baik</li>
+<li>Tanda vital stabil</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>PRINSIP:</b> prioritas ditentukan oleh
+<b>kondisi pasien + red flags</b>, bukan hanya nama diagnosis.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 04 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">DENTAL</span>
+<span>04 / 20</span>
+</div>
+
+<h2>Nyeri Gigi Akut</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+<ul>
+<li>Lokasi & onset nyeri</li>
+<li>Durasi & progresivitas</li>
+<li>Pencetus panas / dingin / mengunyah</li>
+<li>Pembengkakan wajah atau gusi</li>
+<li>Demam</li>
+<li>Sulit menelan atau bernapas</li>
+<li>Sulit membuka mulut</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+<ul>
+<li>TD • nadi • RR • SpO₂ • suhu</li>
+<li>Inspeksi rongga mulut</li>
+<li>Gigi / gusi abnormal</li>
+<li>Edema wajah / intraoral</li>
+<li>Trismus</li>
+<li>Drooling / sekret</li>
+<li>Airway & breathing</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>RED FLAG:</b>
+pembengkakan progresif + trismus + sulit menelan saliva +
+perubahan suara + sesak.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 05 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">DENTAL</span>
+<span>05 / 20</span>
+</div>
+
+<h2>Perdarahan Mulut & Trauma Gigi</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+<ul>
+<li>Trauma atau prosedur gigi?</li>
+<li>Kapan mulai?</li>
+<li>Aktif atau sudah berhenti?</li>
+<li>Perkiraan jumlah darah?</li>
+<li>Pusing / lemah / sinkop?</li>
+<li>Antikoagulan / antiplatelet?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+<ul>
+<li>ABC</li>
+<li>Tanda vital</li>
+<li>Lokasi perdarahan</li>
+<li>Perdarahan aktif?</li>
+<li>Pucat / dingin / berkeringat</li>
+<li>Trauma gigi / rahang</li>
+</ul>
+</div>
+
+</div>
+
+<div class="priority">
+
+<div class="card p1">
+<div class="priority-number red">P1</div>
+<p>Shock, airway compromise, atau instabil.</p>
+</div>
+
+<div class="card p2">
+<div class="priority-number orange">P2</div>
+<p>Perdarahan aktif signifikan tetapi stabil.</p>
+</div>
+
+<div class="card p3">
+<div class="priority-number green">P3</div>
+<p>Perdarahan ringan dan terkontrol.</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 06 -->
+<!-- ========================================================= -->
+
+<section class="slide tmj-bg-slide">
+
+<!-- BACKGROUND TMJ -->
+<div class="tmj-bg-image">
+    <img
+        src="https://ocsportsandrehab.com/wp-content/uploads/2025/02/temporomandibular-joint-TMJ-disorders.png"
+        alt="Temporomandibular Joint"
+    >
+</div>
+
+<div class="topbar">
+<span class="brand">DENTAL • TMJ</span>
+<span>06 / 20</span>
+</div>
+
+<h2>🥱 Dislokasi <span class="cyan">Mandibula</span></h2>
+
+<div class="case tmj-main-content">
+
+<p class="bigquote">
+“Menguap lebar → tiba-tiba
+<span class="red">mulut tidak bisa ditutup</span>.”
+</p>
+
+<div class="grid" style="margin-top:25px">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+
+<ul>
+<li>Terjadi setelah menguap / membuka mulut lebar?</li>
+<li>Mulut tidak dapat ditutup?</li>
+<li>Nyeri rahang / depan telinga?</li>
+<li>Sulit bicara / menelan?</li>
+<li>Riwayat dislokasi?</li>
+<li>Ada trauma?</li>
+</ul>
+
+</div>
+
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+
+<ul>
+<li>Posisi mandibula</li>
+<li>Mulut terbuka menetap</li>
+<li>Deviasi mandibula</li>
+<li>Nyeri preaurikular</li>
+<li>Airway & kemampuan menangani sekret</li>
+<li>Tanda vital</li>
+</ul>
+
+</div>
+
+</div>
+
+
+<div class="redflag">
+
+<b>A:</b>
+Suspek dislokasi TMJ / mandibula.
+Prioritas meningkat bila terdapat
+<b>airway compromise, trauma berat, atau instabilitas.</b>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- 07 -->
+<!-- ========================================================= -->
+
+<section class="slide epistaxis-slide">
+
+<!-- ================= WATERMARK IMAGE ================= -->
+
+<div class="epistaxis-bg-image">
+    <img
+        src="https://www.easyayurveda.com/wp-content/uploads/2017/09/nose-bleeding1.jpg"
+        alt="Epistaksis / Nose Bleeding"
+    >
+</div>
+
+<!-- ================= TOPBAR ================= -->
+
+<div class="topbar">
+    <span class="brand">ENT • EPISTAXIS</span>
+    <span>07 / 20</span>
+</div>
+
+<!-- ================= TITLE ================= -->
+
+<h2>
+    Epistaksis
+</h2>
+
+<!-- ================= MAIN CONTENT ================= -->
+
+<div class="epi-main-content">
+
+<div class="grid">
+
+<!-- ================= SUBJECTIVE ================= -->
+
+<div class="card">
+
+<div class="label">S — SUBJECTIVE</div>
+
+<ul>
+<li>Onset & durasi</li>
+<li>Aktif / intermittent</li>
+<li>Perkiraan jumlah darah</li>
+<li>Trauma hidung</li>
+<li>Antikoagulan / antiplatelet</li>
+<li>Pusing / lemah / sinkop</li>
+</ul>
+
+</div>
+
+<!-- ================= OBJECTIVE ================= -->
+
+<div class="card">
+
+<div class="label">O — OBJECTIVE</div>
+
+<ul>
+<li>TD • nadi • RR • SpO₂</li>
+<li>Perdarahan aktif</li>
+<li>Aliran darah ke faring</li>
+<li>Deformitas hidung</li>
+<li>Tanda hipoperfusi</li>
+<li>Airway</li>
+</ul>
+
+</div>
+
+</div>
+
+<!-- ================= TOOLS ================= -->
+
+<div class="toolrow">
+
+<span class="tool">Tensimeter</span>
+<span class="tool">Pulse Ox</span>
+<span class="tool">Penlight</span>
+<span class="tool">Timer</span>
+<span class="tool">Gloves</span>
+
+</div>
+
+<!-- ================= TRIAGE ALERT ================= -->
+
+<div class="redflag epi-alert">
+
+<b>🚩 RED FLAGS</b>
+
+<span>
+Perdarahan masif / tidak terkendali •
+tanda hipoperfusi •
+gangguan airway •
+penurunan kesadaran •
+trauma wajah berat
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- 08 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">ENT • AIRWAY</span>
+<span>08 / 20</span>
+</div>
+
+<h2>Nyeri Tenggorok / Disfagia</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">LOOK • LISTEN</div>
+<ul>
+<li><b>Stridor?</b></li>
+<li><b>Drooling?</b></li>
+<li>Suara berubah / muffled?</li>
+<li>Sesak?</li>
+<li>Tidak mampu menelan saliva?</li>
+<li>Leher membengkak?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">OBJECTIVE</div>
+<ul>
+<li>RR & SpO₂</li>
+<li>Suhu</li>
+<li>Inspeksi mulut secara aman</li>
+<li>Tonsil & uvula</li>
+<li>Asimetri</li>
+<li>Kondisi umum</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>⚠ AIRWAY RED FLAGS</b><br>
+Stridor • drooling • suara berubah • tidak mampu menangani sekret • distress napas.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 09 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">ENT</span>
+<span>09 / 20</span>
+</div>
+
+<h2>Tinnitus</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+<ul>
+<li>Unilateral / bilateral</li>
+<li>Mendadak / bertahap</li>
+<li>Konstan / intermittent</li>
+<li>Pulsatile / non-pulsatile</li>
+<li>Gangguan pendengaran</li>
+<li>Nyeri / discharge</li>
+<li>Trauma / gejala neurologis</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+<ul>
+<li>Kondisi umum & tanda vital</li>
+<li>Inspeksi telinga</li>
+<li>Otoskop bila tersedia</li>
+<li>Cerumen / foreign body</li>
+<li>Bandingkan pendengaran</li>
+<li>Screening neurologis bila indikasi</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>P2:</b> tinnitus dengan sudden hearing loss,
+trauma, gejala neurologis, atau red flag lainnya.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 10 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">EYE</span>
+<span>10 / 20</span>
+</div>
+
+<h2>Penurunan Penglihatan Mendadak</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+<ul>
+<li>Kapan mulai?</li>
+<li>Satu / kedua mata?</li>
+<li>Parsial / total?</li>
+<li>Nyeri / mata merah?</li>
+<li>Trauma?</li>
+<li>Flashes / floaters?</li>
+<li>Bayangan seperti tirai?</li>
+<li>Sakit kepala / mual?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+<ul>
+<li>Visual acuity</li>
+<li>Pupil size & symmetry</li>
+<li>Respons cahaya</li>
+<li>Gerakan bola mata</li>
+<li>Inspeksi eksternal</li>
+<li>Screening neurologis bila perlu</li>
+</ul>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 11 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">EYE • SCREENING</span>
+<span>11 / 20</span>
+</div>
+
+<h2>Visual Acuity</h2>
+
+<div class="grid3">
+
+<div class="card center">
+<div class="big-number cyan">01</div>
+<h3>SIAPKAN</h3>
+<p>Snellen atau near chart.</p>
+</div>
+
+<div class="card center">
+<div class="big-number cyan">02</div>
+<h3>UJI</h3>
+<p>Satu mata setiap kali.</p>
+</div>
+
+<div class="card center">
+<div class="big-number cyan">03</div>
+<h3>BANDINGKAN</h3>
+<p>Catat kanan dan kiri.</p>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>TRIAGE:</b>
+penurunan visus akut, terutama mendadak dan unilateral,
+perlu diprioritaskan sesuai kondisi dan red flags.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 12 -->
+<!-- ========================================================= -->
+
+<section class="slide pupil-bg-slide">
+
+<!-- ================= PUPIL REFERENCE IMAGE ================= -->
+
+<div class="pupil-bg-image">
+    <img
+        src="https://media.licdn.com/dms/image/v2/C4D22AQHG6WNSx5bpWQ/feedshare-shrink_1280/feedshare-shrink_1280/0/1643370374962?e=2147483647&v=beta&t=3OzDq04k7bxysTJ4byvlHPT5LlOhMENR1zko8jV8RCc"
+        alt="Pupil reference">
+</div>
+
+<!-- ================= TOPBAR ================= -->
+
+<div class="topbar">
+    <span class="brand">PUPIL • NEURO</span>
+    <span>12 / 20</span>
+</div>
+
+<h2>
+    Miosis • Pinpoint • Midriasis
+</h2>
+
+<div class="pupil-main-content">
+
+<div class="pupil-grid">
+
+<div class="pupil miosis"
+onclick="pupilInfo(
+'Miosis',
+'Pupil tampak lebih kecil. Nilai bersama kesadaran, napas dan respons cahaya.'
+)">
+<b>Miosis</b>
+<div class="pupil-dot"></div>
+<small>Pupil konstriksi</small>
+</div>
+
+
+<div class="pupil pinpoint"
+onclick="pupilInfo(
+'Pinpoint',
+'Pupil sangat kecil. Jangan menentukan penyebab hanya dari ukuran pupil.'
+)">
+<b>Pinpoint</b>
+<div class="pupil-dot"></div>
+<small>Sangat kecil</small>
+</div>
+
+
+<div class="pupil midriasis"
+onclick="pupilInfo(
+'Midriasis',
+'Pupil melebar. Korelasikan dengan kesadaran, trauma, gejala neurologis dan respons cahaya.'
+)">
+<b>Midriasis</b>
+<div class="pupil-dot"></div>
+<small>Pupil dilatasi</small>
+</div>
+
+
+<div class="pupil aniso"
+onclick="pupilInfo(
+'Anisokoria',
+'Ukuran pupil kanan dan kiri berbeda. Nilai apakah baru terjadi dan apakah disertai trauma atau gejala neurologis.'
+)">
+<b>Anisokoria</b>
+<div class="pupil-dot"></div>
+<small>Tidak sama</small>
+</div>
+
+</div>
+
+
+<!-- ================= INTERACTIVE RESULT ================= -->
+
+<div id="pupilResult" class="card pupil-result">
+
+<h3 class="cyan">
+Klik salah satu
+</h3>
+
+<p class="mini">
+Identifikasi ukuran, bentuk, simetri dan respons cahaya.
+</p>
+
+</div>
+
+
+<!-- ================= TRIAGE ALERT ================= -->
+
+<div class="redflag pupil-alert">
+
+<b>🚩 RED FLAG</b>
+
+<span>
+Perubahan pupil baru + penurunan kesadaran •
+gangguan neurologis •
+trauma kepala/mata •
+gangguan napas
+</span>
+
+</div>
+
+</div>
+
+</section>
+
+<!-- ========================================================= -->
+<!-- 13 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">PUPIL • NEURO</span>
+<span>13 / 20</span>
+</div>
+
+<h2>Pemeriksaan Pupil</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">CARA CEPAT</div>
+
+<ol style="font-size:clamp(18px,1.5vw,24px);line-height:1.65">
+<li>Lihat target jauh.</li>
+<li>Amati ukuran & bentuk.</li>
+<li>Bandingkan kanan-kiri.</li>
+<li>Sorot penlight dari samping.</li>
+<li>Nilai direct & consensual response.</li>
+<li>Ulangi sisi lain.</li>
+</ol>
+</div>
+
+<div class="card">
+<div class="label">DOKUMENTASI</div>
+
+<p class="mini">
+<b>Pupil isokor 3/3 mm, RC +/+</b><br><br>
+Miosis bilateral, reaktif<br>
+Pinpoint bilateral, respons minimal<br>
+Midriasis bilateral, reaksi menurun<br>
+Anisokor OD 5 mm / OS 3 mm
+</p>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>⚠ NEURO RED FLAG:</b>
+perubahan pupil baru + penurunan kesadaran,
+trauma kepala, gejala neurologis akut, atau gangguan napas.
+</div>
+
+<div class="redflag" style="border-color:var(--yellow)">
+<b>🥱 MENGUAP BERULANG/BERLEBIHAN:</b>
+temuan ini tidak spesifik. Bila tidak biasa dan disertai
+penurunan kesadaran, hipoksia/gangguan napas, atau gejala neurologis akut,
+lakukan penilaian lebih lanjut.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 14 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">EYE • NEURO SCREEN</span>
+<span>14 / 20</span>
+</div>
+
+<h2>Eye Movement & Visual Field</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">EYE MOVEMENT</div>
+<ul>
+<li>Pasien mengikuti jari dengan mata.</li>
+<li>Kepala tetap diam.</li>
+<li>Amati keterbatasan gerak.</li>
+<li>Diplopia?</li>
+<li>Nyeri saat gerakan?</li>
+<li>Gerakan abnormal?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">VISUAL FIELD</div>
+<ul>
+<li>Pasien melihat lurus ke depan.</li>
+<li>Tutup satu mata.</li>
+<li>Jari bergerak dari perifer.</li>
+<li>Tanyakan kapan terlihat.</li>
+<li>Bandingkan kanan dan kiri.</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+Screening lapang pandang di triage bukan pemeriksaan oftalmologi definitif.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 15 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">EYE TRAUMA</span>
+<span>15 / 20</span>
+</div>
+
+<h2>Trauma Mata</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+<ul>
+<li>Blunt / tajam / high velocity?</li>
+<li>Kapan kejadian?</li>
+<li>Nyeri?</li>
+<li>Penurunan penglihatan?</li>
+<li>Perdarahan?</li>
+<li>Fotofobia?</li>
+<li>Diplopia?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+<ul>
+<li>Visual acuity</li>
+<li>Bentuk bola mata</li>
+<li>Pupil</li>
+<li>Gerakan mata bila aman</li>
+<li>Luka / perdarahan</li>
+<li>Edema / deformitas</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>⚠ JANGAN MENEKAN BOLA MATA</b>
+pada kecurigaan cedera penetrasi / open globe.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 16 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">EYE</span>
+<span>16 / 20</span>
+</div>
+
+<h2>Red Painful Eye</h2>
+
+<div class="grid3">
+
+<div class="card">
+<div class="label">S</div>
+<ul>
+<li>Nyeri berat?</li>
+<li>Visus turun?</li>
+<li>Fotofobia?</li>
+<li>Trauma?</li>
+<li>Headache?</li>
+<li>Mual / muntah?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O</div>
+<ul>
+<li>Visual acuity</li>
+<li>Kemerahan</li>
+<li>Pupil</li>
+<li>Edema</li>
+<li>Eye movement</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">A / P</div>
+<ul>
+<li>Nyeri berat + visus turun → red flag</li>
+<li>Instabil / life threat → P1</li>
+<li>Acute ocular red flag stabil → P2</li>
+<li>Mild stable → P3</li>
+</ul>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 17 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">EYE • CHEMICAL</span>
+<span>17 / 20</span>
+</div>
+
+<h2>Paparan Bahan Kimia pada Mata</h2>
+
+<div class="grid">
+
+<div class="card">
+<div class="label">S — SUBJECTIVE</div>
+<ul>
+<li>Zat apa?</li>
+<li>Kapan terkena?</li>
+<li>Satu / kedua mata?</li>
+<li>Berapa lama terpapar?</li>
+<li>Nyeri?</li>
+<li>Visus kabur?</li>
+<li>Fotofobia?</li>
+</ul>
+</div>
+
+<div class="card">
+<div class="label">O — OBJECTIVE</div>
+<ul>
+<li>Kondisi umum</li>
+<li>Visual acuity bila memungkinkan</li>
+<li>Kemerahan</li>
+<li>Blefarospasme</li>
+<li>Pupil</li>
+<li>Tanda cedera mata</li>
+</ul>
+</div>
+
+</div>
+
+<div class="redflag">
+<b>PRIORITAS:</b>
+paparan kimia akut dengan gangguan penglihatan atau cedera bermakna
+harus dianggap serius dan dievaluasi segera.
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 18 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">FOREIGN BODY</span>
+<span>18 / 20</span>
+</div>
+
+<h2>Foreign Body</h2>
+
+<div class="grid3">
+
+<div class="card">
+<h3 class="cyan">👃 HIDUNG</h3>
+<ul>
+<li>Objek & waktu</li>
+<li>Nyeri / perdarahan</li>
+<li>Kesulitan bernapas</li>
+<li>Inspeksi penlight</li>
+</ul>
+<p class="mini">
+Hindari probing berulang.
+</p>
+</div>
+
+<div class="card">
+<h3 class="cyan">👂 TELINGA</h3>
+<ul>
+<li>Objek & waktu</li>
+<li>Nyeri / perdarahan</li>
+<li>Penurunan pendengaran</li>
+<li>Inspeksi / otoskop</li>
+</ul>
+<p class="mini">
+Hindari instrumentasi agresif.
+</p>
+</div>
+
+<div class="card">
+<h3 class="cyan">👁 MATA</h3>
+<ul>
+<li>Mekanisme</li>
+<li>High velocity?</li>
+<li>Nyeri / visus turun</li>
+<li>Pupil & inspeksi</li>
+</ul>
+<p class="mini">
+Jangan menekan bola mata.
+</p>
+</div>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 19 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">CASE SIMULATION</span>
+<span>19 / 20</span>
+</div>
+
+<h2>Case: <span class="cyan">Menguap → Mandibula</span></h2>
+
+<div class="case">
+
+<div class="question">
+Seorang pasien datang setelah <b>menguap lebar</b>.
+Mandibula tampak berubah posisi dan pasien berkata:
+<br><br>
+<span class="cyan">“Mulut saya tidak bisa ditutup.”</span>
+<br><br>
+Tanda vital stabil dan tidak ada sesak.
+<br><br>
+<strong>Apa prioritas triage?</strong>
+</div>
+
+<div class="options">
+
+<div class="option"
+onclick="answer(this,false)">
+A. P1 karena semua dislokasi mandibula mengancam nyawa
+</div>
+
+<div class="option"
+onclick="answer(this,true)">
+B. P2 bila akut, fungsi terganggu, tetapi airway dan kondisi umum stabil
+</div>
+
+<div class="option"
+onclick="answer(this,false)">
+C. P3 karena terjadi hanya karena menguap
+</div>
+
+<div class="option"
+onclick="answer(this,false)">
+D. Langsung melakukan reposisi di triage
+</div>
+
+</div>
+
+<div id="caseAnswer" class="answer"></div>
+
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+<!-- 20 -->
+<!-- ========================================================= -->
+
+<section class="slide">
+
+<div class="topbar">
+<span class="brand">TAKE HOME</span>
+<span>20 / 20</span>
+</div>
+
+<div class="center">
+
+<div class="label">TRIAGE OFFICER</div>
+
+<h2>
+SOAP → <span class="red">RED FLAGS</span> → PRIORITY
+</h2>
+
+<div class="flow">
+
+<div class="step">S — ASK</div>
+<div class="arrow">→</div>
+
+<div class="step">O — LOOK</div>
+<div class="arrow">→</div>
+
+<div class="step">A — ASSESS</div>
+<div class="arrow">→</div>
+
+<div class="step">P — PRIORITIZE</div>
+
+</div>
+
+</div>
+
+<div class="priority" style="margin-top:35px">
+
+<div class="card p1 center">
+<div class="priority-number red">P1</div>
+<p>Ancaman nyawa / tidak stabil</p>
+</div>
+
+<div class="card p2 center">
+<div class="priority-number orange">P2</div>
+<p>Serius / akut / fungsi terganggu tetapi stabil</p>
+</div>
+
+<div class="card p3 center">
+<div class="priority-number green">P3</div>
+<p>Stabil tanpa red flag utama</p>
+</div>
+
+</div>
+
+<div class="redflag">
+Triage Officer melakukan
+<b>ASK → LOOK → MEASURE → RECOGNIZE RED FLAGS → PRIORITIZE.</b>
+</div>
+
+</section>
+
+
+<!-- ========================================================= -->
+
+<div class="footer">
+<span>• TRIAGE 2026 • </span>
+<span>GIGI • THT • MATA</span>
+</div>
+
+<div id="counter" class="counter">01 / 20</div>
+<div id="progress" class="progress"></div>
+
+</div>
+
+
+<script>
+
+const slides=[...document.querySelectorAll(".slide")];
+let current=0;
+
+function showSlide(index){
+
+  current=Math.max(0,Math.min(slides.length-1,index));
+
+  slides.forEach((slide,i)=>{
+    slide.classList.toggle("active",i===current);
+  });
+
+  const number=String(current+1).padStart(2,"0");
+
+  document.getElementById("counter").textContent=
+    number+" / "+String(slides.length).padStart(2,"0");
+
+  document.getElementById("progress").style.width=
+    ((current+1)/slides.length*100)+"%";
+}
+
+function nextSlide(){
+  showSlide(current+1);
+}
+
+function previousSlide(){
+  showSlide(current-1);
+}
+
+document.addEventListener("keydown",function(e){
+
+  if(
+    e.key==="ArrowRight" ||
+    e.key===" " ||
+    e.key==="PageDown"
+  ){
+    e.preventDefault();
+    nextSlide();
+  }
+
+  if(
+    e.key==="ArrowLeft" ||
+    e.key==="PageUp"
+  ){
+    e.preventDefault();
+    previousSlide();
+  }
+
+  if(e.key==="Home"){
+    showSlide(0);
+  }
+
+  if(e.key==="End"){
+    showSlide(slides.length-1);
+  }
+});
+
+
+/* TOUCH / SWIPE */
+
+let touchStartX=null;
+
+document.addEventListener("touchstart",function(e){
+  touchStartX=e.changedTouches[0].screenX;
+},{passive:true});
+
+document.addEventListener("touchend",function(e){
+
+  if(touchStartX===null)return;
+
+  const touchEndX=e.changedTouches[0].screenX;
+  const difference=touchEndX-touchStartX;
+
+  if(Math.abs(difference)>60){
+    if(difference<0){
+      nextSlide();
+    }else{
+      previousSlide();
+    }
+  }
+
+  touchStartX=null;
+
+},{passive:true});
+
+
+/* PUPIL INTERACTIVE */
+
+function pupilInfo(title,text){
+
+  document.getElementById("pupilResult").innerHTML=`
+    <h3 class="cyan">${title}</h3>
+    <p class="mini">${text}</p>
+  `;
+}
+
+
+/* CASE */
+
+function answer(element,correct){
+
+  document.querySelectorAll(".option").forEach(option=>{
+    option.classList.remove("correct","wrong");
+  });
+
+  element.classList.add(correct ? "correct" : "wrong");
+
+  const box=document.getElementById("caseAnswer");
+
+  box.style.display="block";
+
+  if(correct){
+
+    box.innerHTML=`
+      <b class="green">✓ B — P2</b><br>
+      Dislokasi mandibula akut dengan gangguan fungsi,
+      tetapi airway dan kondisi umum stabil → prioritaskan evaluasi segera.
+      Reposisi bukan tindakan otomatis oleh triage officer.
+    `;
+
+  }else{
+
+    box.innerHTML=`
+      <b class="red">✕ Belum tepat.</b><br>
+      Kembali ke SOAP:
+      pastikan airway, kondisi umum, trauma dan red flags sebelum menentukan prioritas.
+    `;
+
+  }
+
+}
+
+
+/* INITIAL */
+
+showSlide(0);
+
+
+const now = new Date();
+
+const hari = [
+    "Minggu","Senin","Selasa","Rabu",
+    "Kamis","Jumat","Sabtu"
+];
+
+const bulan = [
+    "Januari","Februari","Maret","April",
+    "Mei","Juni","Juli","Agustus",
+    "September","Oktober","November","Desember"
+];
+
+document.getElementById("tanggalBerjalan").textContent =
+    `${hari[now.getDay()]}, ${now.getDate()} ${bulan[now.getMonth()]} ${now.getFullYear()}`;
+
+</script>
+
+</body>
+</html>
